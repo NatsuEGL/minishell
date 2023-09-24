@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:53:42 by akaabi            #+#    #+#             */
-/*   Updated: 2023/09/22 09:33:18 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/09/24 09:47:09 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void read_from_pipe(int pipes, t_env **env, t_list **list)
     if (executable_info != NULL)
 	{
         printf("Executing command: %s\n", executable_info[0]);
-        execute_command((const char *const *)executable_info);
+        execute_command(executable_info);
         free(executable_info);
     } else
 	{
@@ -120,11 +120,11 @@ void open_pipe(t_list **list, t_env **envp)
 	}
 }
 
-char* concatenate_path_len(char *directory, size_t dir_length, const char *command)
+char* concatenate_path_len(char *directory, size_t dir_length, char *command)
 {
     // Calculate dir len
-    int total_length = dir_length + ft_strlen(command) + 2;
-    char *path = (char *)malloc(total_length);
+    int full_len = dir_length + ft_strlen(command) + 2;
+    char *path = malloc(full_len);
     if (path == NULL) {
         perror("malloc");
         exit(1);
@@ -138,44 +138,45 @@ char* concatenate_path_len(char *directory, size_t dir_length, const char *comma
 
 char** check_path_for_command(char *path_var, char *command)
 {
-    char *path_ptr = path_var;
+    char *path = path_var;
 
-    while (*path_ptr != '\0')
+    while (*path != '\0')
 	{
         // end of my dir
-        char *end_ptr = path_ptr;
-        while (*end_ptr != '\0' && *end_ptr != ':')
-            end_ptr++;
+        char *end = path;
+        while (*end != '\0' && *end != ':')
+            end++;
         // Calculate dir len
-        size_t dir_length = end_ptr - path_ptr;
+        size_t dir_length = end - path;
         //appending the command
-        char *full_path = concatenate_path_len(path_ptr, dir_length, command);
+        char *full_path = concatenate_path_len(path, dir_length, command);
         if (access(full_path, X_OK) == 0)
 		{
-            char **executable_info = (char **)malloc(2 * sizeof(char *));
-            if (executable_info == NULL) {
+            char **executable_info = malloc(2 * sizeof(char *));
+            if (executable_info == NULL)
+			{
                 perror("malloc");
                 free(full_path);
                 exit(1);
             }
             executable_info[0] = full_path;
             executable_info[1] = NULL;
-            return executable_info;
+            return (executable_info);
         }
         free(full_path);
         // Move to the next
-        if (*end_ptr == ':')
-            path_ptr = end_ptr + 1;
+        if (*end == ':')
+            path = end + 1;
 		else
             break;  //end of the PATH
     }
     return (NULL);
 }
 
-void execute_command(const char *const *executable_info)
+void execute_command(char **executable_info)
 {
     // Execute the command using execve
-    if (execve(executable_info[0], (char *const *)executable_info, NULL) == -1)
+    if (execve(executable_info[0], executable_info, NULL) == -1)
 	{
         perror("execve");
         exit(1);
@@ -188,7 +189,7 @@ char* find_path(t_env *envp)
 
     while (current != NULL)
 	{
-        if (strcmp(current->c, "PATH=") == 0)
+        if (strcmp(current->c, "PATH") == 0)
             return current->v;
         current = current->next;
     }

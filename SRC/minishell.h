@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:01 by aamhal            #+#    #+#             */
-/*   Updated: 2023/09/22 09:24:01 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/09/24 09:46:00 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ int check_echo_n(char *str);
 void builting(t_list **list, t_env **envp);
 void read_from_pipe(int pipes, t_env **env, t_list **list);
 void open_pipe(t_list **list, t_env **envp);
-char* concatenate_path_len(char *directory, size_t dir_length, const char *command);
+char* concatenate_path_len(char *directory, size_t dir_length, char *command);
 char** check_path_for_command(char *path_var, char *command);
-void execute_command(const char *const *executable_info);
+void execute_command(char **executable_info);
 char* find_path(t_env *envp);
 #endif
