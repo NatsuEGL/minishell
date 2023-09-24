@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:53:42 by akaabi            #+#    #+#             */
-/*   Updated: 2023/09/24 09:47:09 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/09/24 10:54:03 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,11 @@ void open_pipe(t_list **list, t_env **envp)
 char* concatenate_path_len(char *directory, size_t dir_length, char *command)
 {
     // Calculate dir len
-    int full_len = dir_length + ft_strlen(command) + 2;
-    char *path = malloc(full_len);
+    int full_len;
+    char *path;
+
+	full_len = dir_length + ft_strlen(command) + 2;
+	path = malloc(full_len);
     if (path == NULL) {
         perror("malloc");
         exit(1);
@@ -132,27 +135,33 @@ char* concatenate_path_len(char *directory, size_t dir_length, char *command)
     // Copy the directory
     ft_strncpy(path, directory, dir_length);
     path[dir_length] = '/';
+	//forbidden_func
     strcpy(path + dir_length + 1, command);
     return (path);
 }
 
 char** check_path_for_command(char *path_var, char *command)
 {
-    char *path = path_var;
+    char *path;
+	char *end;
+	int dir_length;
+	char *full_path;
+	char **executable_info;
 
+	path = path_var;
     while (*path != '\0')
 	{
         // end of my dir
-        char *end = path;
+        end = path;
         while (*end != '\0' && *end != ':')
             end++;
         // Calculate dir len
-        size_t dir_length = end - path;
+        dir_length = end - path;
         //appending the command
-        char *full_path = concatenate_path_len(path, dir_length, command);
+        full_path = concatenate_path_len(path, dir_length, command);
         if (access(full_path, X_OK) == 0)
 		{
-            char **executable_info = malloc(2 * sizeof(char *));
+            executable_info = malloc(2 * sizeof(char *));
             if (executable_info == NULL)
 			{
                 perror("malloc");
@@ -176,22 +185,9 @@ char** check_path_for_command(char *path_var, char *command)
 void execute_command(char **executable_info)
 {
     // Execute the command using execve
-    if (execve(executable_info[0], executable_info, NULL) == -1)
+    if (execve(*executable_info, executable_info, NULL) == -1)
 	{
         perror("execve");
         exit(1);
     }
-}
-
-char* find_path(t_env *envp)
-{
-    t_env *current = envp;
-
-    while (current != NULL)
-	{
-        if (strcmp(current->c, "PATH") == 0)
-            return current->v;
-        current = current->next;
-    }
-    return (NULL);
 }
