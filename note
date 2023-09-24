@@ -1,0 +1,17 @@
+$USERE$USER;DONE;
+ '$USER'$USERR; DONE;                               ->GOOD
+ '"$USER"';DONE;                                    ->GOOD
+$d"$USER"$R;DONE;                                   ->GOOD
+'"ls"'"'$USE'";DONE;                                ->GOOD
+$UA"'$USE'";DONE;                                   ->GOOD
+$UA"'$USER'" ;DONE;                                 ->GOOD
+$USER''"$USER"''R$US''$USER;DONE;                   ->GOOD
+"$USER""$USER '$USE'";DONE;                         ->GOOD
+"'$USER' $USER";DONE;                               ->GOOD
+ $USER"$US"R'$USER';DONE;                           ->GOOD
+"$D"$USER'$A';DONE;                                 ->GOOD
+"'$USER' "'$USER' || " '$USER'"'$USER';DONE;        ->GOOD
+"'$USER' "$U$USE;DONE;                              ->GOOD
+" '$USER'";DONE;                                    ->GOOD
+"$US$USER";DONE;                                    ->GOOD
+"$USER'r'$USER";DONE;                               ->GOOD
