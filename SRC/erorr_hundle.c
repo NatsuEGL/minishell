@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   erorr_hundle.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
+/*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 08:06:42 by aamhal            #+#    #+#             */
-/*   Updated: 2023/09/18 09:16:39 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/03 20:31:42 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,32 @@ void	specifie_type(t_list **list)
 	tmp = *list;
 	while (tmp)
 	{
-		if (tmp->command[0] == '|' || tmp->command[0] == '>' || \
-		tmp->command[0] == '<')
+		if (!ft_strcmp(tmp->command, "<<"))
+		{
 			tmp->type = 'S';
-		else
+			tmp->next->type = 'D';
+		}
+		else if (!ft_strcmp(tmp->command, ">>"))
+		{
+			tmp->sep_type = 3;
+			tmp->type = 'S';
+		}
+		else if (tmp->command[0] == '|')
+		{
+			tmp->sep_type = 4;
+			tmp->type = 'S';
+		}
+		else if (tmp->command[0] == '>')
+		{
+			tmp->sep_type = 1;
+			tmp->type = 'S';
+		}
+		else if (tmp->command[0] == '<')
+		{
+			tmp->sep_type = 2;
+			tmp->type = 'S';
+		}
+		else if (tmp->type != 'D')
 			tmp->type = 'W';
 		tmp = tmp->next;
 	}

@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
+/*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 08:16:34 by akaabi            #+#    #+#             */
-/*   Updated: 2023/09/17 10:53:28 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/04 01:10:56 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int size_ofenv(char **env)
+{
+	int i;
+	
+	i = 0;
+	while(env[i])
+		i++;
+	return (i);
+}
+
+t_env	*filling_env(t_env *a, char **env)
+{
+	int i = 0;
+	int size = size_ofenv(env);
+	a->envir = malloc(sizeof(char *) * size);
+	while(env[i])
+	{
+		a->envir[i] = ft_strdup(env[i]);
+		i++;
+	}
+	return (a);
+}
 
 t_env	*fill_list(char **envp)
 {
@@ -51,6 +74,7 @@ t_env	*fill_list(char **envp)
 		}
 		i++;
 	}
+	head = filling_env(head, envp);
 	return (head);
 }
 

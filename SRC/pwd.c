@@ -1,41 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lst_utils.c                                        :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/17 22:00:20 by akaabi            #+#    #+#             */
-/*   Updated: 2023/09/24 11:30:47 by aamhal           ###   ########.fr       */
+/*   Created: 2023/09/24 09:06:15 by aamhal            #+#    #+#             */
+/*   Updated: 2023/09/24 11:54:50 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_lstadd_back1(t_env **lst, t_env *new)
+void pwd_command(t_list *tmp, t_env **env, int fd)
 {
-	t_env	*p;
-
-	if (!lst || !new)
+	if (pwd_lc(tmp->command) == -1)
 		return ;
-	if (*lst)
-	{
-		p = *lst;
-		while (p->next)
-			p = p -> next;
-		p->next = new;
-	}
-	else
-		*lst = new;
+	char *path = check_env(ft_strdup("PWD"),env);
+	ft_putstr_fd(path,fd);
+	ft_putchar_fd('\n',fd);
 }
-char *ft_strcpy(char *s1, char *s2)
+
+int  pwd_lc(char *p)
 {
 	int i = 0;
-	while(s2[i])
+	while(p[i])
 	{
-		s1[i] = s2[i];
+		if (p[i] >= 'A' && p[i] <= 'Z')
+			p[i] = p[i] + 32;
 		i++;
 	}
-	s1[i] = '\0';
-	return (s1);
+	if (!ft_strcmp(p, "pwd"))
+		return (0);
+	return (-1);
 }

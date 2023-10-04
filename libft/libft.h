@@ -6,7 +6,7 @@
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/10 23:40:37 by aamhal            #+#    #+#             */
-/*   Updated: 2023/08/19 08:01:43 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/09/24 10:57:24 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	ft_striteri(char *s, void (*f)(unsigned int, char*));
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char	**ft_split(char const *s, char c);
 int	ft_strcmp(char *s1, char *s2);
+char	*ft_strrchr(const char *s, int c);
 //printf
 void	ft_putchar(char c, int *count);
 void	ft_putstr(char *s, int *count);

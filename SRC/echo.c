@@ -12,42 +12,32 @@
 
 #include "minishell.h"
 
-void check_echo(t_list **list,int fd)
-{
-	t_list *tmp = (*list);
 
-	while(tmp)
-	{
-		if (!ft_strcmp(tmp->command, "echo"))
-			echo_command(tmp, fd);
-		tmp = tmp->next;
-	}
-}
-
-void echo_command(t_list *list, int fd)
+void echo_command(t_list **tmp, int fd)
 {
-	t_list *tmp = list->next;
 	int f = 0;
 	
-	if (!check_echo_n(tmp->command))
+	(*tmp) = (*tmp)->next;
+	if (!check_echo_n((*tmp)->command))
 	{
-		tmp = tmp->next;
-		while(tmp)
+		(*tmp) = (*tmp)->next;
+		while(*tmp)
 		{
-			ft_putstr_fd(tmp->command,fd);
-			if (tmp->next)
+			ft_putstr_fd((*tmp)->command,fd);
+			if ((*tmp)->next)
 				ft_putchar_fd(' ', fd);	
-			tmp = tmp->next;
+			(*tmp) = (*tmp)->next;
+
 		}
 	}
 	else
 	{
 		f = 1;
-		while(tmp)
+		while(*tmp)
 		{
-			ft_putstr_fd(tmp->command, fd);
+			ft_putstr_fd((*tmp)->command, fd);
 			ft_putchar_fd(' ', fd);	
-		tmp = tmp->next;
+			(*tmp) = (*tmp)->next;
 		}
 	}
 	if (f == 1)

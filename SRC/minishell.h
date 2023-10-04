@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:01 by aamhal            #+#    #+#             */
-/*   Updated: 2023/09/24 10:36:46 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/04 01:31:03 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
+# include <fcntl.h>
 # include <string.h>
+# include <signal.h>
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
@@ -27,10 +29,22 @@ typedef struct s_list
 	struct s_list   *next;
 	char *command;
 	char type;
+    int sep_type;
+    char *buffer;
+    int pipes[2];
 } t_list;
+
+typedef struct s_exec
+{
+    char **command;
+    struct s_exec *next;
+    int infile;
+    int outfile;    
+}t_exec;
 
 typedef struct s_env
 {
+    char **envir;
     char    *c;
     char    *v;
     struct s_env *next;
@@ -79,6 +93,7 @@ int	ft_strcmp(char *s1, char *s2);
 char *ft_strncpy(char *dst, char *src, int n);
 void	ft_lstadd_back1(t_env **lst, t_env *new);
 int	find_index(char *p,int i);
+char *ft_strcpy(char *s1, char *s2);
 
 
 //export.c
@@ -103,16 +118,50 @@ char *special_expand(char *p,int *in);
 int ft_check_ex(char *p);
 
 //echo
-void check_echo(t_list **list, int fd);
-void echo_command(t_list *list, int fd);
+void echo_command(t_list **tmp, int fd);
 int check_echo_n(char *str);
 
+
+//cd
+void cd_command(t_list *tmp, t_env **env);
+void cd_home(t_env **env);
+void cd_back(t_env **env);
+void cd_next(t_list *tmp,t_env **env);
+char *ft_path(t_env **env);
+
+
+//pwd
+void pwd_command(t_list *tmp, t_env **env, int fd);
+int  pwd_lc(char *p);
+
+
+//markik
+
+void execution_part(t_list **list, t_env **envp);
+
+
 //exection_part
-void builting(t_list **list, t_env **envp);
+void builting(t_exec **list, t_env **envp);
 void read_from_pipe(int pipes, t_env **env, t_list **list);
 void open_pipe(t_list **list, t_env **envp);
 char* concatenate_path_len(char *directory, size_t dir_length, char *command);
 char** check_path_for_command(char *path_var, char *command);
 void execute_command(char **executable_info);
-char* find_path(t_env *envp);
+
+//exec utils
+int check_if_separ(t_list **list, char *separ);
+void exec_command(t_list **list, t_env **envp);
+char *delimiter(t_list **list);
+
+//signals
+
+void hundler(int signal);
+void ignore_signals();
+void catch_signals();
+void default_signals();
+
+
+//heredoc.c
+int check_heredoc(t_list **list);
+void    open_heredoc(t_list **list);
 #endif

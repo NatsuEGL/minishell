@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 08:42:16 by aamhal            #+#    #+#             */
-/*   Updated: 2023/09/21 10:42:56 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/04 00:25:47 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,20 +38,25 @@ void	parsing(t_list **list, t_env **envp)
 	while (1)
 	{
 		cmd = readline("$ ");
-		if (!ft_strncmp(cmd, "exit", 4))
-			return ;
-		add_history(cmd);
-		tokenizer(list, cmd, envp);
-    	open_pipe(list, envp);
-		builting(list,envp);
-		free(cmd);
+		if (!cmd)
+		{
+			ft_putstr_fd("exit",1);
+			exit(0);
+		}
+			add_history(cmd);
+			tokenizer(list, cmd, envp);
+			// open_pipe(list, envp);
+
+			execution_part(list, envp);
+
+			//builting(list,envp);
+			ft_free_lst(list);
+			free(cmd);
 	}
 }
 
 void	tokenizer(t_list **list, char *p, t_env **envp)
 {
-	// t_list	*tmp;
-	(void)envp;
 	int		i;
 
 	i = 0;
@@ -73,9 +78,7 @@ void	tokenizer(t_list **list, char *p, t_env **envp)
 		ft_free_lst(list);
 		return ;
 	}
-	// expand(list,envp);
-	// check_echo(list,1);
-    // print_nodes2(*list);
-	// execution()
-	// ft_free_lst(list);
+	if (check_if_separ(list, "<<") == -1)
+		expand(list, envp);
+		//print_nodes2(*list);
 }

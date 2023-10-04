@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:08 by aamhal            #+#    #+#             */
-/*   Updated: 2023/09/21 10:24:42 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/03 18:39:10 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	main(int ac, char **av, char **env)
     t_env *head = NULL;
 	t_list *list = NULL; 
 	char **envp;
+  
+    // catch_signals();
     while(env[i])
         i++;
     envp = malloc(sizeof(char *) * (i + 1));
