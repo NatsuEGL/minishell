@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+         #
+#    By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/10/22 10:32:49 by aamhal            #+#    #+#              #
-#    Updated: 2023/06/05 09:32:56 by aamhal           ###   ########.fr        #
+#    Updated: 2023/10/04 22:06:07 by akaabi           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ SOURCE = ft_isalpha.c \
             ft_isprint.c \
             ft_memset.c \
             ft_bzero.c \
+            ft_strchr.c \
             ft_memmove.c \
             ft_strlcpy.c \
             ft_toupper.c \

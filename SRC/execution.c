@@ -6,33 +6,40 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:53:42 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/04 20:18:51 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/05 23:44:31 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void builting(t_exec **list, t_env **envp)
+void builting(t_exec **list, t_env **envp, int data)
 {
 	t_exec *tmp;
 
 	tmp = (*list);
 	while(tmp)
 	{
-		if (!ft_strncmp(tmp->command[0], "env", ft_strlen("env")))
-			print_nodes(*envp);
-		else if (!ft_strncmp(tmp->command[0], "export", ft_strlen("export")))
-			update_or_add_env(envp, tmp->command[1]);
-		else if (!ft_strncmp(tmp->command[0], "unset", ft_strlen("unset")))
+		if (!ft_strcmp(tmp->command[0], "export"))
+		{
+			if (!tmp->command[1])
+				print_node_export((*envp), data);
+			else
+				update_or_add_env(envp, tmp->command[1]);
+		}
+		else if (!ft_strcmp(tmp->command[0], "unset"))
+		{
 			delete_from_env(envp, tmp->command[1]);
-		// else if (!ft_strncmp(tmp->command[0], "echo", ft_strlen("echo")))
-		// 	echo_command(tmp->command[1], tmp->outfile);
-		// else if (!ft_strncmp(tmp->command[0], "cd", ft_strlen("cd")))
-		// 	cd_command(tmp->command[1], envp);
-		// else if (ft_strncmp(tmp->command[0], "pwd", ft_strlen("pwd")))
-		// 	pwd_command(tmp->command[1], envp, tmp->outfile);
-		// else if (!ft_strncmp(tmp->command[0], "exit", ft_strlen("exit")))
-		// 	exit(0);)
+		}
+		else if (!ft_strcmp(tmp->command[0], "env"))
+			print_nodes(*envp, data);
+		else if (!ft_strcmp(tmp->command[0], "echo"))
+			echo_command(tmp->command, data);
+		else if (!ft_strcmp(tmp->command[0], "cd"))
+			cd_command(tmp->command, envp);
+		else if (tmp->command[0][0] == 'p' || tmp->command[0][0] == 'P')
+			pwd_command(tmp->command[0], envp, data);
+		// else if (!ft_strcmp(tmp->command[0], "exit"))
+		// 	exit(0);
 
 		// makaynsh null f next
 		tmp= tmp->next;
@@ -252,6 +259,8 @@ int	list_size(t_exec *exec_val)
 	t_exec *head;
 	
 	int size = 0;
+	if (!exec_val)
+		return (0);
 	head = exec_val;
 	while(head)
 	{
@@ -265,18 +274,23 @@ char *searching_path(char *command, t_env **envp)
 {
 	char *path = check_env(ft_strdup("PATH"), envp);
 	char **path_splied = check_path_for_command(path, command);
+	if (!path_splied)
+	{
+		printf("command not found\n");
+		exit(0) ;
+	}
 	return(path_splied[0]);
 }
 
 int	Builting_check(char *command)
 {
-	if (!ft_strncmp(command, "env", ft_strlen("env")
-		|| !ft_strncmp(command, "export", ft_strlen("export"))
-		|| !ft_strncmp(command, "unset", ft_strlen("unset"))
-		|| !ft_strncmp(command, "echo", ft_strlen("echo"))
-		|| !ft_strncmp(command, "cd", ft_strlen("cd"))
-		|| !ft_strncmp(command, "pwd", ft_strlen("pwd"))
-		|| !ft_strncmp(command, "exit", ft_strlen("exit"))))
+	if (!ft_strcmp(command, "env")
+		|| !ft_strcmp(command, "export")
+		|| !ft_strcmp(command, "unset")
+		|| !ft_strcmp(command, "echo")
+		|| !ft_strcmp(command, "cd")
+		|| !ft_strcmp(command, "pwd")
+		|| !ft_strcmp(command, "exit"))
 		return (0);
 	return (1);
 }
@@ -302,11 +316,6 @@ void	simple_command(t_exec *exec_val, t_env **envp)
 			close(exec_val->outfile);
 			
 		}
-		if (!Builting_check(exec_val->command[0]))
-		{
-			builting(&exec_val, envp);
-			exit(0);
-		}
 		path = searching_path(exec_val->command[0], envp);
 		free(exec_val->command[0]);
 		exec_val->command[0] = ft_strdup(path);
@@ -321,12 +330,198 @@ void	simple_command(t_exec *exec_val, t_env **envp)
 	return ;
 }
 
+// int size_of_pipe(char **command)
+// {
+
+//  	int count = 0;
+//     char **p = command;
+// 	char *p1 = NULL;
+//     while (*p != NULL) 
+// 	{
+// 		p1 = *p;
+//         while (*p1 != '\0') 
+// 		{
+//             if (*p1 == '|')
+//                 count++;
+//             p1++;
+//         }
+//         p++;
+//     }
+//     return count;
+// }
+
+
+// pid_t young_child(t_exec *exec_val)
+// {
+// 	if (exec_val->infile != STDIN_FILENO)
+// 	{
+// 		dup2(exec_val->infile, STDIN_FILENO);
+// 		close(exec_val->infile);
+// 	}
+// 	if (exec_val->outfile != STDIN_FILENO)
+// 	{
+// 			dup2(exec_val->outfile, STDIN_FILENO);
+// 			close(exec_val->outfile);
+// 	}
+// }
+
+// pid_t midle_child(t_exec *exec_val)
+// {
+	
+// }
+
+// pid_t older_child(t_exec *exec_val)
+// {
+	
+// }
+
+pid_t exec_first_command(t_exec *exec_val, t_env **envp)
+{
+	int fd[2];
+	pid_t pid;
+	char *path;
+
+	if (pipe(fd) == -1)
+	{
+		perror("pipe");
+		exit(1);
+	}
+	
+	pid = fork();
+
+	if (pid == -1)
+	{
+		perror("pid");
+		exit (1);
+	}
+
+	if (pid == 0)
+	{
+		// child process
+		if (exec_val->infile != STDIN_FILENO)
+		{
+			dup2(exec_val->infile, STDIN_FILENO);
+			close(exec_val->infile);	
+		}
+		if (exec_val->outfile != STDOUT_FILENO)
+		{
+			dup2(exec_val->outfile, STDOUT_FILENO);
+			close(exec_val->outfile);
+		}
+		else	
+		{
+			dup2(fd[1],STDOUT_FILENO);
+			close(fd[0]);
+			close(fd[1]);
+		}
+		path = searching_path(exec_val->command[0], envp);
+		free(exec_val->command[0]);
+		// dprintf(2, "execute %s", *exec_val->command)
+		exec_val->command[0] = ft_strdup(path);
+		free(path);
+		execve(exec_val->command[0], exec_val->command, (*envp)->envir);
+		exit(1);
+	}
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
+	close(fd[1]);
+	return (pid);
+}
+
+pid_t exec_last_command(t_exec *exec_val, t_env **envp)
+{
+	pid_t pid;
+	char *path;
+	
+	pid = fork();
+
+	if (pid == -1)
+	{
+		perror("pid");
+		exit (1);
+	}
+
+	if (pid == 0)
+	{
+		// child process 2
+		if (exec_val->infile != STDIN_FILENO)
+		{
+			dup2(exec_val->infile, STDIN_FILENO);
+			close(exec_val->infile);	
+		}
+		// else	
+		// {
+		// 	dup2(fd[0],STDIN_FILENO);
+		// 	close(fd[1]);
+		// 	close(fd[0]);
+		// }
+		if (exec_val->outfile != STDOUT_FILENO)
+		{
+			dup2(exec_val->outfile, STDOUT_FILENO);
+			close(exec_val->outfile);
+		}
+		
+		path = searching_path(exec_val->command[0], envp);
+		free(exec_val->command[0]);
+		exec_val->command[0] = ft_strdup(path);
+		free(path);
+		execve(exec_val->command[0], exec_val->command, (*envp)->envir);
+	}
+	// close(fd[0]);
+	// close(fd[1]);
+	return (pid);
+}
+
+void multiple_command(t_exec *exec_val , t_env **envp)
+{
+	int n = list_size(exec_val);
+	pid_t pid[n];
+	int i = 0;
+
+	int	fd = dup(0);
+	//execute first command
+	while (i < n - 1)
+	{
+		pid[i] = exec_first_command(exec_val, envp);
+		exec_val = exec_val->next;
+		i++;
+	}
+	pid [n - 1] = exec_last_command(exec_val, envp);
+	
+	// for (int i = 0; i < n - 1; i++)
+	// {
+	// 	pid[i] = exec_first_command(exec_val, envp);
+	// 	exec_val = exec_val->next;
+	// }
+	i = 0;
+	while (i < n)
+	{
+		waitpid(pid[i++], NULL, 0);
+	}
+	dup2(fd, 0);
+	
+	// for (int i = 0; i < n; i++)
+	// {
+	// 	waitpid(pid[i], NULL, 0);
+	// }
+	
+}
+
 void	execute_cmd(t_exec *exec_val, t_env **envp)
 {
-	// if (list_size(exec_val) > 1)
-	// 	multiple_command(exec_val, envp);
-	// else
+	if (list_size(exec_val) > 1)
+	{
+		multiple_command(exec_val, envp);
+	}
+	else
+	{
+		if (!Builting_check(exec_val->command[0]))
+		{
+			builting(&exec_val, envp, exec_val->outfile);
+			return ;
+		}
 		simple_command(exec_val, envp);
+	}
 }
 
 void free_list_exe(t_exec **list)
@@ -354,6 +549,8 @@ void execution_part(t_list **list, t_env **envp)
 	n = exec_val;
 	n->infile = STDIN_FILENO;
 	n->outfile = STDOUT_FILENO;
+	if (!head)
+		return ;
 	while(head)
 	{
 		if (head->sep_type == 1)
@@ -394,13 +591,11 @@ void execution_part(t_list **list, t_env **envp)
 			n->command[len] = NULL; 
 			while(head && i < len)
 			{
-				n->command[i] = ft_strdup(head->command); 
+				n->command[i] = ft_strdup(head->command);
 				if (i < len - 1)
 					head = head->next;
 				i++;
 			}
-			//n->command[i] = ft_strdup(head->command);
-			//printf("inside %s\n", head->command);
 		}
 		else if (head->sep_type == 4)
 		{

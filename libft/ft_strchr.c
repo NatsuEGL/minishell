@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
+/*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/09 22:14:28 by aamhal            #+#    #+#             */
-/*   Updated: 2022/10/22 17:19:02 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/04 22:13:00 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strchr(const char *s, int c)
+char	*ft_strchrr(char *s, int c)
 {
 	int		i;
 

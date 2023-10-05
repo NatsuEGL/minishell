@@ -13,49 +13,49 @@
 #include "minishell.h"
 
 
-void echo_command(t_list **tmp, int fd)
+void    echo_command(char **command, int fd)
 {
-	int f = 0;
-	
-	(*tmp) = (*tmp)->next;
-	if (!check_echo_n((*tmp)->command))
-	{
-		(*tmp) = (*tmp)->next;
-		while(*tmp)
-		{
-			ft_putstr_fd((*tmp)->command,fd);
-			if ((*tmp)->next)
-				ft_putchar_fd(' ', fd);	
-			(*tmp) = (*tmp)->next;
+    int    i = 1;
+    int    f = 0;
 
-		}
-	}
-	else
-	{
-		f = 1;
-		while(*tmp)
-		{
-			ft_putstr_fd((*tmp)->command, fd);
-			ft_putchar_fd(' ', fd);	
-			(*tmp) = (*tmp)->next;
-		}
-	}
-	if (f == 1)
-		ft_putchar_fd('\n', fd);
+    if (!check_echo_n(command[1]))
+    {
+        i++;
+        while (command[i])
+        {
+            ft_putstr_fd(command[i], fd);
+            if (command[i + 1])
+                ft_putchar_fd(' ', fd);
+            i++;
+        }
+    }
+    else
+    {
+        f = 1;
+        while (command[i])
+        {
+            ft_putstr_fd(command[i], fd);
+            ft_putchar_fd(' ', fd);
+            i++;
+        }
+    }
+    if (f == 1)
+        ft_putchar_fd('\n', fd);
 }
 
-int check_echo_n(char *str)
+int    check_echo_n(char *str)
 {
-	int i = 0;
+    int    i;
 
-	if (str[i] != '-')
-		return (-1);
-	i++;
-	while(str[i])
-	{
-		if (str[i] != 'n')
-			return (-1);
-		i++;
-	}
-	return (0);
+    i = 0;
+    if (str[i] != '-')
+        return (-1);
+    i++;
+    while (str[i])
+    {
+        if (str[i] != 'n')
+            return (-1);
+        i++;
+    }
+    return (0);
 }

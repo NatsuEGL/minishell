@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:01 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/04 01:31:03 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/05 21:19:44 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_exec
     char **command;
     struct s_exec *next;
     int infile;
-    int outfile;    
+    int outfile;
 }t_exec;
 
 typedef struct s_env
@@ -52,8 +52,8 @@ typedef struct s_env
 
 
  void    print_nodes2(t_list *s);
- void    print_nodes(t_env *s);
-
+ void    print_nodes(t_env *s, int data);
+void    print_node_export(t_env *s , int data);
 
 //parsing
 void    ft_free_lst(t_list **list);
@@ -118,20 +118,20 @@ char *special_expand(char *p,int *in);
 int ft_check_ex(char *p);
 
 //echo
-void echo_command(t_list **tmp, int fd);
+void echo_command(char **command, int fd);
 int check_echo_n(char *str);
 
 
 //cd
-void cd_command(t_list *tmp, t_env **env);
+void cd_command(char **command, t_env **env);
 void cd_home(t_env **env);
 void cd_back(t_env **env);
-void cd_next(t_list *tmp,t_env **env);
+void cd_next(char *command,t_env **env);
 char *ft_path(t_env **env);
 
 
 //pwd
-void pwd_command(t_list *tmp, t_env **env, int fd);
+void pwd_command(char *command, t_env **env, int fd);
 int  pwd_lc(char *p);
 
 
@@ -141,7 +141,7 @@ void execution_part(t_list **list, t_env **envp);
 
 
 //exection_part
-void builting(t_exec **list, t_env **envp);
+void builting(t_exec **list, t_env **envp, int data);
 void read_from_pipe(int pipes, t_env **env, t_list **list);
 void open_pipe(t_list **list, t_env **envp);
 char* concatenate_path_len(char *directory, size_t dir_length, char *command);

@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:08 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/03 18:39:10 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/05 22:50:14 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,40 @@
     }
 }
 
-void    print_nodes(t_env *s)
+void    print_nodes(t_env *s , int data)
 {
     t_env    *current;
 
     current = s;
     while (current != NULL)
     {
-        printf("%s=%s\n", current ->c,current->v);
+        if (current && !current->v)
+        {
+            if (current && current->next)
+                current = current->next;
+            return ;
+        }
+        ft_putstr_fd(current->c, data);
+        write(data, "=",1);
+        ft_putstr_fd(current->v, data);
+        write(data, "\n",1);
+        current = current->next;
+    }
+}
+void    print_node_export(t_env *s , int data)
+{
+    t_env    *current;
+
+    current = s;
+    while (current != NULL)
+    {
+        write(data, "declare -x ", 11);
+        ft_putstr_fd(current->c, data);
+        write(data, "=",1);
+        write(data, "\"",1);
+        ft_putstr_fd(current->v, data);
+        write(data, "\"",1);
+        write(data, "\n",1);
         current = current->next;
     }
 }

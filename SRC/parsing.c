@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 08:42:16 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/04 00:25:47 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/05 22:50:11 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ void	parsing(t_list **list, t_env **envp)
 			// open_pipe(list, envp);
 
 			execution_part(list, envp);
-
 			//builting(list,envp);
 			ft_free_lst(list);
 			free(cmd);

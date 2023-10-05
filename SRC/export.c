@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
+/*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:18:19 by akaabi            #+#    #+#             */
-/*   Updated: 2023/09/17 11:05:57 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/04 22:31:33 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,10 +88,10 @@ void update_or_add_env(t_env **envp, char *p)
     char *v2;
     char *c;
     char *v;
+    char *equal;
 
     if (only_alnum(p) == 1)
     {
-
         c = command_ret(p);
         v = value_ret(p);
         existing = find_node(*envp, c);
@@ -106,6 +106,8 @@ void update_or_add_env(t_env **envp, char *p)
                 }
                 else
                 {
+                    if (!v)
+                        return ;
                     free(existing->v);
                     existing->v = ft_strdup(v);
                 }
@@ -115,21 +117,36 @@ void update_or_add_env(t_env **envp, char *p)
                 new_env = malloc(sizeof(t_env));
                 if (!new_env)
                     return;
-                new_env->c = ft_strdup(c);
-                if (ft_isdigit(new_env->c[0]) == 1)
+                equal = ft_strchrr(p, '=');
+                if (!equal)
                 {
-                    printf("not a valid identifier\n");
-                    exit(1);
+                    c = command_ret(p);
+                    new_env->c = ft_strdup(c);
+                    if (ft_isdigit(new_env->c[0]) == 1)
+                    {
+                        printf("not a valid identifier\n");
+                        exit(1);
+                    }
+                    v = value_ret(p);
+                    new_env->v = v;
                 }
-                if (!v)
-                    new_env->v = ft_strdup("");
                 else
-                    new_env->v = ft_strdup(v);
+                {
+                    new_env->c = ft_strdup(c);
+                    if (ft_isdigit(new_env->c[0]) == 1)
+                    {
+                        printf("not a valid identifier\n");
+                        exit(1);
+                    }
+                    if (!v)
+                        new_env->v = ft_strdup("");
+                    else
+                        new_env->v = ft_strdup(v);
+                }
                 new_env->next =  NULL;
                 free(c);
                 free(v);
                 ft_lstadd_back1(envp, new_env);
-
             }
         }
         else

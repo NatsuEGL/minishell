@@ -15,3 +15,12 @@ $USER''"$USER"''R$US''$USER;DONE;                   ->GOOD
 " '$USER'";DONE;                                    ->GOOD
 "$US$USER";DONE;                                    ->GOOD
 "$USER'r'$USER";DONE;                               ->GOOD
+
+
+export :
+export a ==> declare -x a   ||   env NULL
+export a= ==> declare -x a=""   || env a= 
+export USER  no modif
+export USER= ft_strdup '\0'    || env USER=
+export USER=sfdj   ft_strdup sfdj
+export USER+=0000   ft_join sfdj0000
