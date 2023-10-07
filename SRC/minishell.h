@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:01 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/05 21:19:44 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/07 20:20:42 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,13 +97,13 @@ char *ft_strcpy(char *s1, char *s2);
 
 
 //export.c
-void update_or_add_env(t_env **envp, char *p);
+void update_or_add_env(t_env **envp, char **p);
 t_env *find_node(t_env *head, char *command);
 char *command_ret(char *str);
 char *value_ret(char *str);
 
 //unset.c
-void delete_from_env(t_env **envp, char *p);
+void delete_from_env(t_env **envp, char **p);
 
 //expand
 void	expand(t_list **list,t_env **env);

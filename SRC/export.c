@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:18:19 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/04 22:31:33 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/07 20:25:44 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ int cheking_only(char *c)
     return (1);
 }
 
-void update_or_add_env(t_env **envp, char *p)
+void update_or_add_env(t_env **envp, char **p)
 {
     t_env *existing;
     t_env *new_env;
@@ -89,69 +89,81 @@ void update_or_add_env(t_env **envp, char *p)
     char *c;
     char *v;
     char *equal;
-
-    if (only_alnum(p) == 1)
+    int i;
+    p++;
+    while (*p)
     {
-        c = command_ret(p);
-        v = value_ret(p);
-        existing = find_node(*envp, c);
-        if (cheking_only(p) == 1)
+        if (only_alnum(*p) == 1)
         {
-            if (existing)
+            c = command_ret(*p);
+            v = value_ret(*p);
+            existing = find_node(*envp, c);
+            if (cheking_only(*p) == 1)
             {
-                if(fun(p) == 1)
+                if (existing)
                 {
-                    v2 = ft_strjoin(existing->v , v);
-                    existing->v = ft_strdup(v2);
+                    if (!ft_strcmp(c, "_"))
+                            i = 0;              
+                    else if(fun(*p) == 1)
+                    {
+                        if (existing->v && v)
+                        {
+                            v2 = ft_strjoin(existing->v , v);
+                        existing->v = ft_strdup(v2);
+                            
+                        }
+                    }
+                    else
+                    {
+                        if (!v)
+                            return ;
+                        free(existing->v);
+                        existing->v = ft_strdup(v);
+                    }
                 }
                 else
                 {
-                    if (!v)
-                        return ;
-                    free(existing->v);
-                    existing->v = ft_strdup(v);
+                    new_env = malloc(sizeof(t_env));
+                    if (!new_env)
+                        return;
+                    equal = ft_strchrr(*p, '=');
+                    if (!equal)
+                    {
+                        c = command_ret(*p);
+                        new_env->c = ft_strdup(c);
+                        if (ft_isdigit(new_env->c[0]) == 1)
+                        {
+                            printf("not a valid identifier\n");
+                            exit(1);
+                        }
+                        v = value_ret(*p);
+                        new_env->v = v;
+                    }
+                    else
+                    {
+                        new_env->c = ft_strdup(c);
+                        if (ft_isdigit(new_env->c[0]) == 1)
+                        {
+                            printf("not a valid identifier\n");
+                            exit(1);
+                        }
+                        if (!v)
+                            new_env->v = ft_strdup("");
+                        else
+                            new_env->v = ft_strdup(v);
+                    }
+                    new_env->next =  NULL;
+                    free(c);
+                    free(v);
+                    ft_lstadd_back1(envp, new_env);
                 }
             }
             else
-            {
-                new_env = malloc(sizeof(t_env));
-                if (!new_env)
-                    return;
-                equal = ft_strchrr(p, '=');
-                if (!equal)
-                {
-                    c = command_ret(p);
-                    new_env->c = ft_strdup(c);
-                    if (ft_isdigit(new_env->c[0]) == 1)
-                    {
-                        printf("not a valid identifier\n");
-                        exit(1);
-                    }
-                    v = value_ret(p);
-                    new_env->v = v;
-                }
-                else
-                {
-                    new_env->c = ft_strdup(c);
-                    if (ft_isdigit(new_env->c[0]) == 1)
-                    {
-                        printf("not a valid identifier\n");
-                        exit(1);
-                    }
-                    if (!v)
-                        new_env->v = ft_strdup("");
-                    else
-                        new_env->v = ft_strdup(v);
-                }
-                new_env->next =  NULL;
-                free(c);
-                free(v);
-                ft_lstadd_back1(envp, new_env);
-            }
+                return ;
         }
         else
             return ;
-    }
-    else
-        return ;
+            p++;
+        }
+        
 }

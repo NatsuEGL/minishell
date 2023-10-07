@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:53:42 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/05 23:44:31 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/07 22:50:10 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ void builting(t_exec **list, t_env **envp, int data)
 			if (!tmp->command[1])
 				print_node_export((*envp), data);
 			else
-				update_or_add_env(envp, tmp->command[1]);
+				update_or_add_env(envp, tmp->command);
 		}
 		else if (!ft_strcmp(tmp->command[0], "unset"))
 		{
-			delete_from_env(envp, tmp->command[1]);
+			delete_from_env(envp, tmp->command);
 		}
 		else if (!ft_strcmp(tmp->command[0], "env"))
 			print_nodes(*envp, data);
@@ -200,7 +200,7 @@ void execute_command(char **executable_info)
 
 int	redirection_in(char *file)
 {
-	int fd = open(file, O_CREAT | O_RDONLY | O_TRUNC, 0777);
+	int fd = open(file, O_RDONLY, 0777);
 	if (fd == -1)
 		return -1;
 	return (fd);
@@ -238,7 +238,7 @@ int	here_doc(char *Delim)
 		while(1)
 		{
 			cmd = readline("Heredoc> ");
-			if (!cmd && !ft_strcmp(cmd, Delim))
+			if (!ft_strcmp(cmd, Delim))
 			{
 				free(cmd);
 				exit(0);
@@ -314,7 +314,6 @@ void	simple_command(t_exec *exec_val, t_env **envp)
 		{
 			dup2(exec_val->outfile, STDOUT_FILENO);
 			close(exec_val->outfile);
-			
 		}
 		path = searching_path(exec_val->command[0], envp);
 		free(exec_val->command[0]);
@@ -375,136 +374,307 @@ void	simple_command(t_exec *exec_val, t_env **envp)
 	
 // }
 
-pid_t exec_first_command(t_exec *exec_val, t_env **envp)
+// pid_t exec_first_command(t_exec *exec_val, t_env **envp)
+// {
+// 	int fd[2];
+// 	pid_t pid;
+// 	char *path;
+
+// 	if (pipe(fd) == -1)
+// 	{
+// 		perror("pipe");
+// 		exit(1);
+// 	}
+	
+// 	pid = fork();
+
+// 	if (pid == -1)
+// 	{
+// 		perror("pid");
+// 		exit (1);
+// 	}
+
+// 	if (pid == 0)
+// 	{
+// 		// child process
+// 		if (exec_val->infile != STDIN_FILENO)
+// 		{
+// 			dup2(exec_val->infile, STDIN_FILENO);
+// 			close(exec_val->infile);	
+// 		}
+// 		if (exec_val->outfile != STDOUT_FILENO)
+// 		{
+// 			dup2(exec_val->outfile, STDOUT_FILENO);
+// 			close(exec_val->outfile);
+// 		}
+// 		else	
+// 		{
+// 			dup2(fd[1],STDOUT_FILENO);
+// 			close(fd[0]);
+// 			close(fd[1]);
+// 		}
+// 		path = searching_path(exec_val->command[0], envp);
+// 		free(exec_val->command[0]);
+// 		// dprintf(2, "execute %s", *exec_val->command)
+// 		exec_val->command[0] = ft_strdup(path);
+// 		free(path);
+// 		execve(exec_val->command[0], exec_val->command, (*envp)->envir);
+// 		exit(1);
+// 	}
+// 	dup2(fd[0], STDIN_FILENO);
+// 	close(fd[0]);
+// 	close(fd[1]);
+// 	return (pid);
+// }
+
+// pid_t exec_last_command(t_exec *exec_val, t_env **envp)
+// {
+// 	pid_t pid;
+// 	char *path;
+	
+// 	pid = fork();
+
+// 	if (pid == -1)
+// 	{
+// 		perror("pid");
+// 		exit (1);
+// 	}
+
+// 	if (pid == 0)
+// 	{
+// 		// child process 2
+// 		if (exec_val->infile != STDIN_FILENO)
+// 		{
+// 			dup2(exec_val->infile, STDIN_FILENO);
+// 			close(exec_val->infile);	
+// 		}
+// 		// else	
+// 		// {
+// 		// 	dup2(fd[0],STDIN_FILENO);
+// 		// 	close(fd[1]);
+// 		// 	close(fd[0]);
+// 		// }
+// 		if (exec_val->outfile != STDOUT_FILENO)
+// 		{
+// 			dup2(exec_val->outfile, STDOUT_FILENO);
+// 			close(exec_val->outfile);
+// 		}
+		
+// 		path = searching_path(exec_val->command[0], envp);
+// 		free(exec_val->command[0]);
+// 		exec_val->command[0] = ft_strdup(path);
+// 		free(path);
+// 		execve(exec_val->command[0], exec_val->command, (*envp)->envir);
+// 	}
+// 	// close(fd[0]);
+// 	// close(fd[1]);
+// 	return (pid);
+// }
+
+int **make_fd(int n)
 {
-	int fd[2];
+	int i;
+	int **fd;
+	
+	i = 0;
+	fd = malloc(sizeof(int *) * (n));
+	while(i < n - 1)
+	{
+		fd[i] = malloc(sizeof(int) * 2);
+		i++;
+	}
+	fd[i] = NULL;
+	return (fd);
+}
+
+pid_t first_child(t_exec *exec_val, t_env **envp, int **fd)
+{
 	pid_t pid;
 	char *path;
+	size_t i;
 
-	if (pipe(fd) == -1)
-	{
-		perror("pipe");
-		exit(1);
-	}
-	
 	pid = fork();
-
+	i = 0;
 	if (pid == -1)
 	{
-		perror("pid");
-		exit (1);
+		perror(":pid 1st child:");
+		exit(1);
 	}
-
-	if (pid == 0)
+	else if (pid == 0)
 	{
-		// child process
 		if (exec_val->infile != STDIN_FILENO)
 		{
 			dup2(exec_val->infile, STDIN_FILENO);
-			close(exec_val->infile);	
+			close(exec_val->infile);
 		}
 		if (exec_val->outfile != STDOUT_FILENO)
 		{
 			dup2(exec_val->outfile, STDOUT_FILENO);
 			close(exec_val->outfile);
 		}
-		else	
+		else
+			dup2(fd[0][1], STDOUT_FILENO);
+		while(fd[i])
 		{
-			dup2(fd[1],STDOUT_FILENO);
-			close(fd[0]);
-			close(fd[1]);
+			close(fd[i][0]);
+			close(fd[i][1]);
+			i++;
 		}
+		//builting
 		path = searching_path(exec_val->command[0], envp);
 		free(exec_val->command[0]);
 		// dprintf(2, "execute %s", *exec_val->command)
 		exec_val->command[0] = ft_strdup(path);
 		free(path);
 		execve(exec_val->command[0], exec_val->command, (*envp)->envir);
-		exit(1);
 	}
-	dup2(fd[0], STDIN_FILENO);
-	close(fd[0]);
-	close(fd[1]);
-	return (pid);
+	return(pid);
 }
 
-pid_t exec_last_command(t_exec *exec_val, t_env **envp)
+pid_t middle_child(t_exec *exec_val, t_env **envp, int **fd, size_t i)
 {
 	pid_t pid;
 	char *path;
-	
-	pid = fork();
+	size_t j;
 
+	pid = fork();
+	j = 0;
 	if (pid == -1)
 	{
-		perror("pid");
-		exit (1);
+		perror(":pid midlle child:");
+		exit(1);
 	}
-
-	if (pid == 0)
+	else if (pid == 0)
 	{
-		// child process 2
 		if (exec_val->infile != STDIN_FILENO)
 		{
 			dup2(exec_val->infile, STDIN_FILENO);
-			close(exec_val->infile);	
+			close(exec_val->infile);
 		}
-		// else	
-		// {
-		// 	dup2(fd[0],STDIN_FILENO);
-		// 	close(fd[1]);
-		// 	close(fd[0]);
-		// }
+		else
+			dup2(fd[i - 1][0], STDIN_FILENO);
 		if (exec_val->outfile != STDOUT_FILENO)
 		{
 			dup2(exec_val->outfile, STDOUT_FILENO);
 			close(exec_val->outfile);
 		}
-		
+		else
+			dup2(fd[i][1], STDOUT_FILENO);
+		while(fd[j])
+		{
+			close(fd[j][0]);
+			close(fd[j][1]);
+			j++;
+		}
+		//builting
 		path = searching_path(exec_val->command[0], envp);
 		free(exec_val->command[0]);
+		// dprintf(2, "execute %s", *exec_val->command)
 		exec_val->command[0] = ft_strdup(path);
 		free(path);
 		execve(exec_val->command[0], exec_val->command, (*envp)->envir);
 	}
-	// close(fd[0]);
-	// close(fd[1]);
-	return (pid);
+	return(pid);
+}
+
+pid_t last_child(t_exec *exec_val , t_env **envp, int **fd, int n)
+{
+	pid_t pid;
+	char *path;
+	size_t j;
+
+	pid = fork();
+	j = 0;
+	if (pid == -1)
+	{
+		perror(":pid last child:");
+		exit(1);
+	}
+	else if (pid == 0)
+	{
+		if (exec_val->infile != STDIN_FILENO)
+		{
+			dup2(exec_val->infile, STDIN_FILENO);
+			close(exec_val->infile);
+		}
+		else
+			dup2(fd[n][0], STDIN_FILENO);
+		if (exec_val->outfile != STDOUT_FILENO)
+		{
+			dup2(exec_val->outfile, STDOUT_FILENO);
+			close(exec_val->outfile);
+		}
+		while(fd[j])
+		{
+			close(fd[j][0]);
+			close(fd[j][1]);
+			j++;
+		}
+		//builting
+		path = searching_path(exec_val->command[0], envp);
+		free(exec_val->command[0]);
+		// dprintf(2, "execute %s", *exec_val->command)
+		exec_val->command[0] = ft_strdup(path);
+		free(path);
+		execve(exec_val->command[0], exec_val->command, (*envp)->envir);
+	}
+	return(pid);	
+}
+
+void free_double(int **fd)
+{
+	size_t i;
+
+	i = 0;
+	while(fd[i])
+	{
+		free(fd[i]);
+		i++;
+	}
+	free(fd);
 }
 
 void multiple_command(t_exec *exec_val , t_env **envp)
 {
-	int n = list_size(exec_val);
-	pid_t pid[n];
-	int i = 0;
+	int n = list_size(exec_val); // how many pipes that i have if it's n - 1
+	pid_t pid[3];
+	int	**fd;
+	int i;
+	int j;
 
-	int	fd = dup(0);
-	//execute first command
-	while (i < n - 1)
+	i = 1;
+	j = 0;
+	fd = make_fd(n);
+	while(fd[j])
 	{
-		pid[i] = exec_first_command(exec_val, envp);
+		if (pipe(fd[j]) == -1)
+		{
+			perror(":pipe fd:");
+			exit(0);
+		}
+		j++;
+	}
+	pid[0] = first_child(exec_val, envp, fd);
+	exec_val = exec_val->next;
+	while(i < n - 1)
+	{
+		pid[1] = middle_child(exec_val, envp, fd, i);
 		exec_val = exec_val->next;
 		i++;
 	}
-	pid [n - 1] = exec_last_command(exec_val, envp);
-	
-	// for (int i = 0; i < n - 1; i++)
-	// {
-	// 	pid[i] = exec_first_command(exec_val, envp);
-	// 	exec_val = exec_val->next;
-	// }
+	pid[2] = last_child(exec_val, envp, fd, (i - 1));
 	i = 0;
-	while (i < n)
+	while(fd[i])
 	{
-		waitpid(pid[i++], NULL, 0);
+		close(fd[i][0]);
+		close(fd[i][1]);
+		i++;
 	}
-	dup2(fd, 0);
-	
-	// for (int i = 0; i < n; i++)
-	// {
-	// 	waitpid(pid[i], NULL, 0);
-	// }
-	
+	waitpid(pid[0], NULL, 0);
+	waitpid(pid[1], NULL, 0);
+	waitpid(pid[2], NULL, 0);
+	free_double(fd);
+	return ;
 }
 
 void	execute_cmd(t_exec *exec_val, t_env **envp)
@@ -520,7 +690,8 @@ void	execute_cmd(t_exec *exec_val, t_env **envp)
 			builting(&exec_val, envp, exec_val->outfile);
 			return ;
 		}
-		simple_command(exec_val, envp);
+		else
+			simple_command(exec_val, envp);
 	}
 }
 
@@ -575,6 +746,7 @@ void execution_part(t_list **list, t_env **envp)
 		{
 			head = head->next;
 			n->infile = here_doc(head->command);
+			return ;
 		}
 		else if (head->type == 'W')
 		{
