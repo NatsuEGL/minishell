@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 08:42:16 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/07 22:38:52 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/10 15:26:58 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,6 @@ void	parsing(t_list **list, t_env **envp)
 			add_history(cmd);
 			tokenizer(list, cmd, envp);
 			// open_pipe(list, envp);
-
 			execution_part(list, envp);
 			//builting(list,envp);
 			ft_free_lst(list);
@@ -79,5 +78,5 @@ void	tokenizer(t_list **list, char *p, t_env **envp)
 	}
 	if (check_if_separ(list, "<<") == -1)
 		expand(list, envp);
-		//print_nodes2(*list);
+		// print_nodes2(*list);
 }

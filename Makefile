@@ -5,7 +5,7 @@ LIBFT_A = libft/libft.a
 LIBFT = libft/
 
 SRC = SRC/main.c SRC/parsing.c SRC/utils.c SRC/check_input.c SRC/erorr_hundle.c SRC/quotes_hundle.c SRC/env.c SRC/str_utils.c SRC/export.c SRC/lst_utils.c SRC/unset.c SRC/expand.c SRC/expand2.c \
-	SRC/echo.c SRC/execution.c SRC/cd.c SRC/pwd.c SRC/execution_utiles.c SRC/signals.c SRC/heredoc.c
+	SRC/echo.c SRC/execution.c SRC/cd.c SRC/pwd.c SRC/execution_utiles.c SRC/signals.c SRC/heredoc.c SRC/execution2.c SRC/execution3.c SRC/execution4.c SRC/execution5.c
 		
 OBJ = $(SRC:.c=.o)
 

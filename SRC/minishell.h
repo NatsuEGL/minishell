@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:01 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/07 20:20:42 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 20:01:25 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_exec
     struct s_exec *next;
     int infile;
     int outfile;
+    int flag;
 }t_exec;
 
 typedef struct s_env
@@ -150,8 +151,9 @@ void execute_command(char **executable_info);
 
 //exec utils
 int check_if_separ(t_list **list, char *separ);
-void exec_command(t_list **list, t_env **envp);
-char *delimiter(t_list **list);
+// void exec_command(t_list **list, t_env **envp);
+// char *delimiter(t_list **list);
+// char *searching_path(char *command, t_env **envp);
 
 //signals
 
@@ -159,9 +161,26 @@ void hundler(int signal);
 void ignore_signals();
 void catch_signals();
 void default_signals();
-
-
+//execution2.c
+int redirection_in(char *file);
+int redirection_out(char *file);
+int	redirection_append(char *file);
+int	here_doc(char *Delim);
+int	list_size(t_exec *exec_val);
+//execution3.c
+char    *searching_path(char *command, t_env **envp);
+int     Builting_check(char *command);
+void    simple_command(t_exec *exec_val, t_env **envp);
+//execution4.c
+int **make_fd(int n);
+pid_t first_child(t_exec *exec_val, t_env **envp, int **fd);
+pid_t middle_child(t_exec *exec_val, t_env **envp, int **fd, size_t i);
+pid_t last_child(t_exec *exec_val , t_env **envp, int **fd, int n);
+void free_double(int **fd);
+//execution5.
+void multiple_command(t_exec *exec_val , t_env **envp);
+void free_list_exe(t_exec **list);
 //heredoc.c
-int check_heredoc(t_list **list);
-void    open_heredoc(t_list **list);
+// int check_heredoc(t_list **list);
+// void    open_heredoc(t_list **list);
 #endif

@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:08 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/05 22:50:14 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/08 21:05:08 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@
 void    print_nodes(t_env *s , int data)
 {
     t_env    *current;
-
+    
     current = s;
     while (current != NULL)
     {
