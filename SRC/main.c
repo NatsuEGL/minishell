@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:08 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/08 21:05:08 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 22:58:51 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ void    print_node_export(t_env *s , int data)
     }
 }
 
-// void v()
-// {
-//     system("leaks minishell");
-// }
+void v()
+{
+    system("leaks minishell");
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -78,6 +78,7 @@ int	main(int ac, char **av, char **env)
 	char **envp;
   
     // catch_signals();
+    // atexit(v);
     while(env[i])
         i++;
     envp = malloc(sizeof(char *) * (i + 1));

@@ -13,12 +13,17 @@
 #include "minishell.h"
 
 
-void    echo_command(char **command, int fd)
+void echo_command(char **command, int fd)
 {
     int    i = 1;
     int    f = 0;
-
-    if (!check_echo_n(command[1]))
+    if (!ft_strcmp(command[1], "$?"))
+    {
+        ft_putnbr_fd(es,1);
+        ft_putchar_fd('\n', fd);
+        return ;
+    }
+     if (!check_echo_n(command[1]))
     {
         i++;
         while (command[i])
@@ -29,7 +34,7 @@ void    echo_command(char **command, int fd)
             i++;
         }
     }
-    else
+    else 
     {
         f = 1;
         while (command[i])

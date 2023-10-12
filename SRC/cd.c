@@ -3,21 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
+/*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 08:41:03 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/07 21:50:01 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 21:49:49 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int count_cdback(char *p)
+{
+    char **sp =ft_split(p, '/');
+    int i = 0;
+    int count = 0;
+    while(sp[i])
+    {
+        if (!strcmp(sp[i],".."))
+            count++;
+        i++;
+    }
+    return (count);
+}
+
+
 void    cd_command(char **command, t_env **env)
 {
+    int i;
     if (!command[1])
         cd_home(env);
-    else if (command[1] && !ft_strcmp(command[1], ".."))
-        cd_back(env);
+    else if (command[1] && !ft_strncmp(command[1], "..", 2))
+    {
+        if (ft_strlen(command[1]) == 2 || command[1][2] == '/')
+        {
+            i = count_cdback(command[1]);
+            while(i--)
+                cd_back(env);       
+        }
+    }
     else if (command[1])
         cd_next(command[1], env);
 }
@@ -28,7 +51,6 @@ void    cd_home(t_env **env)
     t_env    *tmp;
     char    *path;
     size_t    size;
-printf("hi\n");
     home = check_env(ft_strdup("HOME"), env);
     tmp = (*env);
     path = NULL;
@@ -71,10 +93,15 @@ void    cd_back(t_env **env)
     envp = (*env);
     path = NULL;
     opwd = ft_path(env);
+    if (opwd[0] == '\0')
+    {
+        free(opwd);
+        opwd = ft_strdup("/");
+    }
+    printf("|%s|\n",opwd);
     size = 0;
     if (access(opwd, F_OK) == -1)
     {
-        perror("access");
         return ;
     }
     if (chdir(opwd) != 0)

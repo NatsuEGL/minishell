@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:01 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/11 20:01:25 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 22:05:31 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include "../libft/libft.h"
 # include <readline/readline.h>
 # include <readline/history.h>
+
+int     es;
 
 typedef struct s_list
 {
@@ -43,13 +45,21 @@ typedef struct s_exec
     int flag;
 }t_exec;
 
+// typedef struct s_var
+// {
+//     int es;
+// }   t_var;
+
 typedef struct s_env
 {
     char **envir;
     char    *c;
     char    *v;
+    // t_var *var;
     struct s_env *next;
 }   t_env;
+
+
 
 
  void    print_nodes2(t_list *s);
@@ -119,7 +129,7 @@ char *special_expand(char *p,int *in);
 int ft_check_ex(char *p);
 
 //echo
-void echo_command(char **command, int fd);
+void echo_command(char **command,int fd);
 int check_echo_n(char *str);
 
 
@@ -129,6 +139,7 @@ void cd_home(t_env **env);
 void cd_back(t_env **env);
 void cd_next(char *command,t_env **env);
 char *ft_path(t_env **env);
+int count_cdback(char *p);
 
 
 //pwd
@@ -180,7 +191,16 @@ void free_double(int **fd);
 //execution5.
 void multiple_command(t_exec *exec_val , t_env **envp);
 void free_list_exe(t_exec **list);
+char *command_slash(char *command);
 //heredoc.c
 // int check_heredoc(t_list **list);
 // void    open_heredoc(t_list **list);
+
+
+
+//exit 
+int check_exit(char *p);
+void exit_command(char **command, int data);
+int exit_status(int status);
+
 #endif

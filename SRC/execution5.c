@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:06:12 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/10 15:07:40 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 22:06:06 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void multiple_command(t_exec *exec_val , t_env **envp)
 	int	**fd;
 	int i;
 	int j;
+	int status;
 
 	i = 1;
 	j = 0;
@@ -48,9 +49,10 @@ void multiple_command(t_exec *exec_val , t_env **envp)
 		close(fd[i][1]);
 		i++;
 	}
-	waitpid(pid[0], NULL, 0);
-	waitpid(pid[1], NULL, 0);
-	waitpid(pid[2], NULL, 0);
+	waitpid(pid[0], &status, 0);
+	waitpid(pid[1], &status, 0);
+	waitpid(pid[2], &status, 0);
+	es = exit_status(status);
 	free_double(fd);
 	return ;
 }
@@ -64,4 +66,12 @@ void free_list_exe(t_exec **list)
 	free((*list)->command);
 	free(*list);
 	*list = NULL;
+}
+
+char *command_slash(char *command)
+{
+	if (access(command, F_OK | X_OK) == 0)
+		return (ft_strdup(command));
+	// es = 127;
+	return (NULL);
 }

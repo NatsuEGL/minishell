@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/19 08:06:42 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/07 19:59:28 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 22:31:54 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	specifie_type(t_list **list)
 		if (!ft_strcmp(tmp->command, "<<"))
 		{
 			tmp->type = 'S';
-			tmp->next->type = 'D';
 			tmp->sep_type = 5;
 		}
 		else if (!ft_strcmp(tmp->command, ">>"))

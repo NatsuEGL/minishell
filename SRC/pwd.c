@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/24 09:06:15 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/05 21:19:50 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 22:55:24 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void    pwd_command(char *command, t_env **env, int fd)
     path = check_env(ft_strdup("PWD"), env);
     ft_putstr_fd(path, fd);
     ft_putchar_fd('\n', fd);
+    free(path);
 }
 
 int    pwd_lc(char *p)

@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:53:42 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/11 20:45:43 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 22:57:42 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ void builting(t_exec **list, t_env **envp, int data)
 			cd_command(tmp->command, envp);
 		else if (tmp->command[0][0] == 'p' || tmp->command[0][0] == 'P')
 			pwd_command(tmp->command[0], envp, data);
-		// else if (!ft_strcmp(tmp->command[0], "exit"))
-		// 	exit(0);
+		else if (!ft_strcmp(tmp->command[0], "exit"))
+			exit_command(tmp->command,data);
 
 		// makaynsh null f next
 		tmp= tmp->next;
@@ -183,6 +183,7 @@ char** check_path_for_command(char *path_var, char *command)
             }
             executable_info[0] = full_path;
             executable_info[1] = NULL;
+			free(full_path);
             return (executable_info);
         }
         free(full_path);
@@ -734,6 +735,8 @@ void	execute_cmd(t_exec *exec_val, t_env **envp)
 	}
 	else
 	{
+	// 	puts("hehe\n");
+	// exit(0);
 		 if (!Builting_check(exec_val->command[0]))
 		{
 			builting(&exec_val, envp, exec_val->outfile);
@@ -771,7 +774,7 @@ void execution_part(t_list **list, t_env **envp)
 	n->outfile = STDOUT_FILENO;
 	if (!head)
 		return ;
-		int s= 0;
+		int s = 0;
 	while(head)
 	{
 		if (head->sep_type == 1)
@@ -831,9 +834,9 @@ void execution_part(t_list **list, t_env **envp)
 		s++;
 	}
 	n->next = NULL;
-	if (s < 2)
+	if (n->command && s < 2 && (*list)->sep_type == 5)
 		return ;
-	else
+	else 
 	{
 		execute_cmd(exec_val, envp);
 		free_list_exe(&exec_val);

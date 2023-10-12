@@ -6,7 +6,7 @@
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 08:37:36 by aamhal            #+#    #+#             */
-/*   Updated: 2023/09/17 11:00:58 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/11 21:10:23 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	expand(t_list **list, t_env **env)
 		while (tmp->command[i])
 		{
 			if (tmp->command[i] == '$' && tmp->command[i + 1] == '\0')
+				break ;
+			if (tmp->command[i] == '$' && tmp->command[i + 1] == '?')
 				break ;
 			if (tmp->command[i] == '$')
 			{
