@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:53:42 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/11 20:36:37 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 20:45:43 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -771,6 +771,7 @@ void execution_part(t_list **list, t_env **envp)
 	n->outfile = STDOUT_FILENO;
 	if (!head)
 		return ;
+		int s= 0;
 	while(head)
 	{
 		if (head->sep_type == 1)
@@ -827,14 +828,14 @@ void execution_part(t_list **list, t_env **envp)
 		}
 		if (head)
 		head = head->next;
+		s++;
 	}
 	n->next = NULL;
-	if (!exec_val)
-	{
-		puts("hehe");
+	if (s < 2)
 		return ;
-	}
 	else
+	{
 		execute_cmd(exec_val, envp);
-	// free_list_exe(&exec_val);
+		free_list_exe(&exec_val);
+	}
 }

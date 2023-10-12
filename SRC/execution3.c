@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/10 15:01:31 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/10 15:02:45 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/11 21:56:44 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,10 @@
 
 char *searching_path(char *command, t_env **envp)
 {
+	if (ft_strchr(command, '/'))
+		return (command_slash(command));
 	char *path = check_env(ft_strdup("PATH"), envp);
 	char **path_splied = check_path_for_command(path, command);
-	if (!path_splied)
-	{
-		printf("command not found\n");
-		exit(0) ;
-	}
 	return(path_splied[0]);
 }
 
