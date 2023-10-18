@@ -1,39 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   check_input_norm.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/25 08:17:47 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/15 20:53:26 by aamhal           ###   ########.fr       */
+/*   Created: 2023/10/15 20:58:02 by aamhal            #+#    #+#             */
+/*   Updated: 2023/10/15 21:14:05 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void hundler(int signal)
+int quot_norm(char *cmd, int i, int j, char *c, char **p)
 {
-	(void)signal;
-	write(1,"\n",1);
-	// rl_on_new_line();
-	// rl_replace_line("",0);
-	// rl_redisplay();
-}
-
-void ignore_signals()
-{
-	signal(SIGQUIT,SIG_IGN);
-    signal(SIGINT,SIG_IGN);
-}
-void catch_signals()
-{
-	signal(SIGQUIT,SIG_IGN);
-    signal(SIGINT,hundler);
-}
-
-void default_signals()
-{
-	signal(SIGQUIT,SIG_DFL);
-    signal(SIGINT,SIG_DFL);
+	*c = '\0';
+	*p = malloc(1);
+	*p[0] = '\0';
+	j = i;
+	if (cmd[i] && (cmd[i] == '\'' || cmd[i] == '\"'))
+	{
+		*c = cmd[i];
+		i = find_index(cmd, i);
+		*p = ft_strjoin(*p, ft_substr(cmd, j, i - j + 1));
+		i++;
+	}
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:08 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/11 22:58:51 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/17 11:39:58 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ int	main(int ac, char **av, char **env)
   
     // catch_signals();
     // atexit(v);
+    printf("%d\n",getpid());
     while(env[i])
         i++;
     envp = malloc(sizeof(char *) * (i + 1));

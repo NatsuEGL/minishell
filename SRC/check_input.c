@@ -6,7 +6,7 @@
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:35:10 by aamhal            #+#    #+#             */
-/*   Updated: 2023/09/17 10:52:46 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/15 21:13:14 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,18 +19,9 @@ int	is_quote(t_list **list, char *cmd, int i)
 	char	*p;
 	int		j;
 
-	p = malloc(1);
-	p[0] = '\0';
 	while (cmd[i])
 	{
-		j = i;
-		if (cmd[i] && (cmd[i] == '\'' || cmd[i] == '\"'))
-		{
-			c = cmd[i];
-			i = find_index(cmd ,i);
-			p = ft_strjoin(p, ft_substr(cmd, j, i-j + 1));
-			i++;
-		}
+		i = quot_norm(cmd, i, j, &c, &p);
 		j = i;
 		while ((cmd[i] && cmd[i] != '\'' && cmd[i] != '\"'))
 		{
@@ -46,8 +37,6 @@ int	is_quote(t_list **list, char *cmd, int i)
 		}
 	}
 	new = ft_lstnew(p);
-	if (!list)
-		exit(1);
 	ft_lstadd_back(list, new);
 	return (i);
 }

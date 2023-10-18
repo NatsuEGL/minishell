@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 08:42:16 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/11 22:51:14 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/17 13:43:43 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,16 +40,14 @@ void	parsing(t_list **list, t_env **envp)
 		cmd = readline("$ ");
 		if (!cmd)
 		{
-			ft_putstr_fd("exit",1);
+			ft_putstr_fd("exit", 1);
 			exit(0);
 		}
-			add_history(cmd);
-			tokenizer(list, cmd, envp);
-			// open_pipe(list, envp);
-			execution_part(list, envp);
-			//builting(list,envp);
-			ft_free_lst(list);
-			free(cmd);
+		add_history(cmd);
+		tokenizer(list, cmd, envp);
+		execution_part(list, envp);
+		ft_free_lst(list);
+		free(cmd);
 	}
 }
 
@@ -73,11 +71,11 @@ void	tokenizer(t_list **list, char *p, t_env **envp)
 	if (syntax_error(list) == -1)
 	{
 		ft_putstr_fd("syntax error near unexpected token\n", 2);
-		es = 258;
+		(*envp)->es = 258;
 		ft_free_lst(list);
 		return ;
 	}
 	if (check_if_separ(list, "<<") == -1)
 		expand(list, envp);
-		// print_nodes2(*list);
+	// print_nodes2(*list);
 }

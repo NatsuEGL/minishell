@@ -6,7 +6,7 @@
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/27 08:37:36 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/11 21:10:23 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/12 20:35:15 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,12 +62,13 @@ int	ft_check_ex(char *p)
 	i = 0;
 	while (p[i])
 	{
-	if (p[i] == '$' && !ft_isalnum(p[i + 1]) && p[i + 1] != '_')
-		return (0);
+		if (p[i] == '$' && !ft_isalnum(p[i + 1]) && p[i + 1] != '_')
+			return (0);
 		i++;
 	}
 	return (-1);
 }
+
 char	*check_env_q(char *p, t_env **env)
 {
 	t_env	*tmp;
@@ -89,6 +90,7 @@ char	*check_env_q(char *p, t_env **env)
 	free(p);
 	return (ft_strdup(tmp->v));
 }
+
 char	*check_env(char *p, t_env **env)
 {
 	t_env	*tmp;
@@ -105,6 +107,7 @@ char	*check_env(char *p, t_env **env)
 		return (NULL);
 	return (ft_strdup(tmp->v));
 }
+
 void	normal_expand(t_list *tmp, t_env **env)
 {
 	int		i;
@@ -124,7 +127,7 @@ void	normal_expand(t_list *tmp, t_env **env)
 		j = i;
 		while (tmp->command[i] && tmp->command[i] != '$')
 			i++;
-		x = check_env(ft_substr(tmp->command, j, i - j),env);
+		x = check_env(ft_substr(tmp->command, j, i - j), env);
 		if (x)
 			p = ft_strjoin(p, x);
 		j = i;
@@ -141,6 +144,7 @@ void	normal_expand(t_list *tmp, t_env **env)
 	free(tmp->command);
 	tmp->command = ft_strjoin(ft_strdup(""), p);
 }
+
 char	*normal_expand_helper1(char *s, t_env **env)
 {
 	int		i;
@@ -160,7 +164,7 @@ char	*normal_expand_helper1(char *s, t_env **env)
 		j = i;
 		while (s[i] && s[i] != '$')
 			i++;
-		x = check_env(ft_substr(s, j, i - j),env);
+		x = check_env(ft_substr(s, j, i - j), env);
 		if (x)
 			p = ft_strjoin(p, x);
 		j = i;
@@ -201,7 +205,7 @@ char	*normal_expand_helper2(char *s, t_env **env)
 				break ;
 			i++;
 		}
-		x = check_env_q(ft_substr(s, j, i - j),env);
+		x = check_env_q(ft_substr(s, j, i - j), env);
 		if (x)
 			p = ft_strjoin(p, x);
 		j = i;

@@ -1,11 +1,12 @@
 NAME = minishell
-CC = cc
-FLAGS =   -Wall -Wextra -Werror 
+CC = cc 
+FLAGS =   -Wall -Wextra -Werror #-g -fsanitize=address
 LIBFT_A = libft/libft.a
 LIBFT = libft/
 
 SRC = SRC/main.c SRC/parsing.c SRC/utils.c SRC/check_input.c SRC/erorr_hundle.c SRC/quotes_hundle.c SRC/env.c SRC/str_utils.c SRC/export.c SRC/lst_utils.c SRC/unset.c SRC/expand.c SRC/expand2.c \
-	SRC/echo.c SRC/execution.c SRC/cd.c SRC/pwd.c SRC/execution_utiles.c SRC/signals.c SRC/heredoc.c SRC/execution2.c SRC/execution3.c SRC/execution4.c SRC/execution5.c SRC/exit.c
+	SRC/echo.c SRC/execution.c SRC/cd.c SRC/pwd.c SRC/execution_utiles.c SRC/signals.c SRC/heredoc.c SRC/execution2.c SRC/execution3.c SRC/execution4.c SRC/execution5.c SRC/exit.c \
+	SRC/cd2.c SRC/cd3.c SRC/check_input_norm.c SRC/exec_norm1.c SRC/exec_norm2.c SRC/exec_norm3.c SRC/exec_norm4.c SRC/exec_norm5.c
 		
 OBJ = $(SRC:.c=.o)
 

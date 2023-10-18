@@ -6,28 +6,31 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 08:16:34 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/04 01:10:56 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/18 09:18:43 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int size_ofenv(char **env)
+int	size_ofenv(char **env)
 {
-	int i;
-	
+	int	i;
+
 	i = 0;
-	while(env[i])
+	while (env[i])
 		i++;
 	return (i);
 }
 
 t_env	*filling_env(t_env *a, char **env)
 {
-	int i = 0;
-	int size = size_ofenv(env);
+	int	i;
+	int	size;
+
+	i = 0;
+	size = size_ofenv(env);
 	a->envir = malloc(sizeof(char *) * size);
-	while(env[i])
+	while (env[i])
 	{
 		a->envir[i] = ft_strdup(env[i]);
 		i++;
