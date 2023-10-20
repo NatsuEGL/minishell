@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 21:03:03 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/15 22:30:33 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/20 16:23:24 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ void	exec_func(t_exec *exec_val, t_env **envp)
 	path = searching_path(exec_val->command[0], envp);
 	if (!path)
 		return ;
+	// printf("%s\n", path);
 	free(exec_val->command[0]);
 	exec_val->command[0] = ft_strdup(path);
 	free(path);

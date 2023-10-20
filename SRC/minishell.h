@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:01 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/18 09:05:04 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/20 16:52:19 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,15 @@ typedef struct s_var2
 	int		len;
 	int		s;
 }   t_var2;
+
+typedef struct s_var3
+{
+    char	*v2;
+	char	*c;
+	char	*v;
+	char	*equal;
+	int		i;
+}   t_var3;
  void    print_nodes2(t_list *s);
  void    print_nodes(t_env *s, int data);
 void    print_node_export(t_env *s , int data);
@@ -96,7 +105,8 @@ int only_alnum(char *str);
 
 //env.c
 t_env *fill_list(char **envp);
-
+void    env_norm(t_env **new_env, char **envp, int *i, int *j);
+void    env_norm2(t_env **head, t_env **current, t_env **new_env);
 //util_func
 int	ft_strcmp(char *s1, char *s2);
 char *ft_strncpy(char *dst, char *src, int n);
@@ -112,6 +122,7 @@ char *command_ret(char *str);
 char *value_ret(char *str);
 
 //unset.c
+void    unset_norm(t_env **prev, t_env **current, t_env **envp);
 void delete_from_env(t_env **envp, char **p);
 
 //expand
@@ -148,9 +159,6 @@ char *cd_back_free(char *p);
 //pwd
 void pwd_command(char *command, t_env **env, int fd);
 int  pwd_lc(char *p);
-
-
-//markik
 
 void execution_part(t_list **list, t_env **envp);
 
@@ -224,12 +232,12 @@ int    exec_norm8(t_exec **n, t_list **list , int s);
 void    initialination(t_exec **n, t_exec *exec_val);
 void    initialination2(t_var2 *vars);
 void    initialination3(t_list  **head, t_exec **n, t_exec **exec_val);
-//heredoc.c
-// int check_heredoc(t_list **list);
-// void    open_heredoc(t_list **list);
-
-
-
+//export_norm.c
+void    existing_norm(char **p, t_var3 **vars, t_env **existing);
+void    not_exesting(char **p, t_env **new_env, t_var3 **vars);
+void    not_exesting2(t_env **new_env, t_var3 **vars);
+void    not_exesting_norm(t_env *new_env, t_var3 **vars, char **p, t_env **envp);
+void    export_initialisation(char **p, t_var3 **vars, t_env **envp, t_env **existing);
 //exit 
 int check_exit(char *p);
 void exit_command(char **command, int data);

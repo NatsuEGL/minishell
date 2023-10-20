@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 08:16:34 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/18 09:18:43 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/20 16:52:06 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,24 +57,8 @@ t_env	*fill_list(char **envp)
 		j = 0;
 		while (envp[i][j] && envp[i][j] != '=')
 			j++;
-		new_env->c = malloc(j + 1);
-		new_env->c = ft_strncpy(new_env->c, envp[i], j);
-		new_env->c[j] = '\0';
-		if (envp[i][j] == '=')
-			new_env->v = ft_strdup(envp[i] + j + 1);
-		else
-			new_env->v = NULL;
-		new_env->next = NULL;
-		if (!head)
-		{
-			head = new_env;
-			current = new_env;
-		}
-		else
-		{
-			current->next = new_env;
-			current = new_env;
-		}
+		env_norm(&new_env, envp, &i, &j);
+		env_norm2(&head, &current, &new_env);
 		i++;
 	}
 	head = filling_env(head, envp);
