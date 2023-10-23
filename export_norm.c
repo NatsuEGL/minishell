@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/20 15:46:55 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/22 11:33:00 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/23 14:19:42 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,26 +18,30 @@ void	existing_norm(char **p, t_var3 **vars, t_env **existing)
 		(*vars)->i = 0;
 	else if (fun(*p) == 1)
 	{
+		free((*vars)->c);
 		if ((*existing)->v && (*vars)->v)
 			(*existing)->v = ft_strjoin((*existing)->v, ft_strdup((*vars)->v));
+		free((*vars)->v);
 	}
 	else
 	{
 		if (!(*vars)->v)
 		{
+			free((*vars)->c);
 			free((*vars)->v);
 			return ;
 		}
+		free((*vars)->c);
 		free((*existing)->v);
 		(*existing)->v = ft_strdup((*vars)->v);
-		free_var(vars);
+		free((*vars)->v);
 	}
 }
 
 int	not_exesting(char **p, t_env **new_env, t_var3 **vars, t_env **envp)
 {
 	(*new_env)->c = ft_strdup((*vars)->c);
-	if (export_parsing(*new_env, envp) == -1)
+	if (export_parsing(*new_env, envp ,vars) == -1)
 		return (-1);
 	(*vars)->v = value_ret(*p);
 	(*new_env)->v = (*vars)->v;
@@ -49,7 +53,7 @@ int	not_exesting(char **p, t_env **new_env, t_var3 **vars, t_env **envp)
 int	not_exesting2(t_env **new_env, t_var3 **vars, t_env **envp)
 {
 	(*new_env)->c = ft_strdup((*vars)->c);
-	if (export_parsing(*new_env, envp) == -1)
+	if (export_parsing(*new_env, envp, vars) == -1)
 		return (-1);
 	if (!(*vars)->v)
 		(*new_env)->v = ft_strdup("");
@@ -69,6 +73,9 @@ int	not_exesting_norm(t_env *new_env, t_var3 **vars, char **p, t_env **envp)
 			export_fail_free(new_env, vars);
 			return (-1);
 		}
+		free((*vars)->c);
+		if ((*vars)->v)
+			free((*vars)->v);
 	}
 	else
 	{
@@ -77,6 +84,8 @@ int	not_exesting_norm(t_env *new_env, t_var3 **vars, char **p, t_env **envp)
 			export_fail_free(new_env, vars);
 			return (-1);
 		}
+		free((*vars)->c);
+		free((*vars)->v);
 	}
 	new_env->next = NULL;
 	ft_lstadd_back1(envp, new_env);

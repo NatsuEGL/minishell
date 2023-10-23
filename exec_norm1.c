@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/15 21:03:03 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/23 08:44:26 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/23 10:29:44 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,10 +74,11 @@ void	first(t_exec *exec_val, int **fd)
 {
 	if (exec_val->infile != STDIN_FILENO && exec_val->flag3 == 0)
 	{
+		puts("salam\n");
 		dup2(exec_val->infile, STDIN_FILENO);
 		close(exec_val->infile);
 	}
-	if (exec_val->outfile != STDOUT_FILENO && exec_val->flag2 == 0)
+	if (exec_val->outfile != STDOUT_FILENO)
 	{
 		dup2(exec_val->outfile, STDOUT_FILENO);
 		close(exec_val->outfile);

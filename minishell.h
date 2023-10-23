@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 07:29:01 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/23 08:42:55 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/23 14:19:22 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,9 +188,6 @@ void	execute_command(char **executable_info);
 
 //exec utils
 int		check_if_separ(t_list **list, char *separ);
-// void exec_command(t_list **list, t_env **envp);
-// char *delimiter(t_list **list);
-// char *searching_path(char *command, t_env **envp);
 
 //signals
 
@@ -254,11 +251,14 @@ void	initialination3(t_list **head, t_exec **n, t_exec **exec_val);
 int		check_exit(char *p);
 void	exit_command(char **command);
 int		exit_status(int status);
+//export_parsing2.c
+int parc_export(char **command);
 //export_parsing.c
-int		export_parsing(t_env *list, t_env **envp);
+int		export_parsing(t_env *list, t_env **envp, t_var3 **vars);
 void	free_env(t_env **list);
 void	free_var(t_var3 **list);
 void	export_fail_free(t_env *new_env, t_var3 **vars);
+char    *check_ex(char *p);
 //export_norm.c
 void	existing_norm(char **p, t_var3 **vars, t_env **existing);
 int		not_exesting(char **p, t_env **new_env, t_var3 **vars, t_env **envp);

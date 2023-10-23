@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/05 08:42:16 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/22 11:16:49 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/23 12:52:39 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,5 +117,5 @@ void	tokinizer_norm(t_list **list, t_env **envp)
 	(*envp)->flag = 0;
 	if (check_if_separ(list, "<<") == -1)
 		expand(list, envp);
-	minishell_case(envp, list);
+	
 }

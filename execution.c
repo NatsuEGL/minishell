@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/20 10:53:42 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/23 08:26:26 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/23 11:23:42 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,5 +118,5 @@ void	execution_part(t_list **list, t_env **envp)
 		free_list_exe(&exec_val);
 	}
 	else
-		return ;
+		free(exec_val);
 }

@@ -6,7 +6,7 @@
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 21:18:19 by akaabi            #+#    #+#             */
-/*   Updated: 2023/10/22 10:53:56 by akaabi           ###   ########.fr       */
+/*   Updated: 2023/10/23 14:16:55 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ void	update_or_add_env(t_env **envp, char **p)
 	vars = malloc(sizeof(t_var3));
 	p++;
 	new_env = NULL;
+	// *p = check_ex(*p);
 	while (*p)
 	{
 		if (only_alnum(*p) == 1)
@@ -111,8 +112,13 @@ void	update_or_add_env(t_env **envp, char **p)
 			}
 		}
 		else
+		{
+			ft_putstr_fd("not a valid identifier\n", 2);
+			(*envp)->es = 1;
+			free(vars);
 			return ;
+		}
 		p++;
 	}
-	free_var(&vars);
+	free(vars);
 }
