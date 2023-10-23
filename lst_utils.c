@@ -1,35 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   lst_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/13 02:36:47 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/17 12:10:42 by aamhal           ###   ########.fr       */
+/*   Created: 2023/08/17 22:00:20 by akaabi            #+#    #+#             */
+/*   Updated: 2023/10/20 16:31:38 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+void	ft_lstadd_back1(t_env **lst, t_env *new)
 {
-	size_t	i;
-	size_t	j;
+	t_env	*p;
+
+	if (!lst || !new)
+		return ;
+	if (*lst)
+	{
+		p = *lst;
+		while (p->next)
+			p = p -> next;
+		p->next = new;
+	}
+	else
+		*lst = new;
+}
+
+char	*ft_strcpy(char *s1, char *s2)
+{
+	int	i;
 
 	i = 0;
-	if (!needle[i])
-		return ((char *)haystack);
-	while (i < len && haystack[i])
+	while (s2[i])
 	{
-		j = 0;
-		while (needle[j] == haystack[i + j] && haystack[i] && (j + i) < len)
-		{
-			if (!needle[j + 1])
-				return (((char *)haystack + i));
-			j++;
-		}
+		s1[i] = s2[i];
 		i++;
 	}
-	return (0);
+	s1[i] = '\0';
+	return (s1);
 }

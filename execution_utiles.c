@@ -1,35 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnstr.c                                       :+:      :+:    :+:   */
+/*   execution_utiles.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/13 02:36:47 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/17 12:10:42 by aamhal           ###   ########.fr       */
+/*   Created: 2023/09/24 11:38:14 by aamhal            #+#    #+#             */
+/*   Updated: 2023/10/20 17:46:41 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
+int	check_if_separ(t_list **list, char *separ)
 {
-	size_t	i;
-	size_t	j;
+	t_list	*tmp;
 
-	i = 0;
-	if (!needle[i])
-		return ((char *)haystack);
-	while (i < len && haystack[i])
+	tmp = *list;
+	while (tmp)
 	{
-		j = 0;
-		while (needle[j] == haystack[i + j] && haystack[i] && (j + i) < len)
-		{
-			if (!needle[j + 1])
-				return (((char *)haystack + i));
-			j++;
-		}
-		i++;
+		if (!ft_strcmp(tmp->command, separ) && tmp->type == 'S')
+			return (0);
+		tmp = tmp->next;
 	}
-	return (0);
+	return (-1);
 }

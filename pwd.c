@@ -1,39 +1,47 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/11 22:56:56 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/17 12:10:29 by aamhal           ###   ########.fr       */
+/*   Created: 2023/09/24 09:06:15 by aamhal            #+#    #+#             */
+/*   Updated: 2023/10/20 15:38:02 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "minishell.h"
 
-int	ft_strncmp(const char *s1, const char *s2, size_t n)
+void	pwd_command(char *command, t_env **env, int fd)
 {
-	size_t	i;
+	char	path[1024];
 
-	i = 0;
-	while (i < n && (s1[i] || s2[i]))
+	if (!command)
+		return ;
+	if (pwd_lc(command) == -1)
+		return ;
+	if (getcwd(path, sizeof(path)) != NULL)
+		ft_putstr_fd(path, fd);
+	else
 	{
-		if (((unsigned char *)s1)[i] > ((unsigned char *)s2)[i])
-			return (1);
-		else if (((unsigned char *)s1)[i] < ((unsigned char *)s2)[i])
-			return (-1);
-		i++;
+		(*env)->es = 1;
+		write(2, "error\n", 6);
 	}
-	return (0);
+	write(1, "\n", 1);
 }
 
-int	ft_strcmp(char *s1, char *s2)
+int	pwd_lc(char *p)
 {
 	int	i;
 
 	i = 0;
-	while (s1[i] != '\0' && s2[i] != '\0' && s1[i] == s2[i])
+	while (p[i])
+	{
+		if (p[i] >= 'A' && p[i] <= 'Z')
+			p[i] = p[i] + 32;
 		i++;
-	return (s1[i] - s2[i]);
+	}
+	if (!ft_strcmp(p, "pwd"))
+		return (0);
+	return (-1);
 }

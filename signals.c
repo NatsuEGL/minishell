@@ -1,47 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akaabi <akaabi@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/05 07:29:08 by aamhal            #+#    #+#             */
-/*   Updated: 2023/10/23 08:35:27 by akaabi           ###   ########.fr       */
+/*   Created: 2023/09/25 08:17:47 by aamhal            #+#    #+#             */
+/*   Updated: 2023/10/21 20:39:46 by akaabi           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	main(int ac, char **av, char **env)
+void	hundler(int signal)
 {
-	int		i;
-	int		j;
-	t_env	*head;
-	t_list	*list;
-	char	**envp;
+	(void)signal;
+	write(1, "\n", 1);
+	rl_on_new_line();
+	// rl_replace_line("", 0);
+	rl_redisplay();
+}
 
-	catch_signals();
-	(void)ac;
-	(void)av;
-	i = 0;
-	head = NULL;
-	list = NULL;
-	if (!(*env))
-	{
-		puts("hme9 nta hhhh \n");
-		exit(0);
-	}
-	while (env[i])
-		i++;
-	envp = malloc(sizeof(char *) * (i + 1));
-	envp[i] = NULL;
-	j = i;
-	i = 0;
-	while (i < j)
-	{
-		envp[i] = env[i];
-		i++;
-	}
-	parsing(&list, &head, envp);
-	return (0);
+void	ignore_signals(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
+}
+
+void	catch_signals(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, hundler);
+}
+
+void	default_signals(void)
+{
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_DFL);
 }

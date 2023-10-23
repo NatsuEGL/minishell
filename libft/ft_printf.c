@@ -6,7 +6,7 @@
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 09:19:58 by aamhal            #+#    #+#             */
-/*   Updated: 2023/06/05 09:19:21 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/17 12:09:17 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	ft_printf(const char *s, ...)
 		}
 		else
 			ft_putchar(s[i], &count);
-	i++;
+		i++;
 	}
 	va_end(args);
 	return (count);

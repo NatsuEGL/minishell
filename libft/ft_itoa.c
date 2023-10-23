@@ -6,7 +6,7 @@
 /*   By: aamhal <aamhal@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 12:09:26 by aamhal            #+#    #+#             */
-/*   Updated: 2022/11/03 10:06:59 by aamhal           ###   ########.fr       */
+/*   Updated: 2023/10/17 12:09:07 by aamhal           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static int	ft_countnbr(int c)
 
 	count = 0;
 	if (c <= 0)
-			count++;
+		count++;
 	while (c)
 	{
 		c /= 10;

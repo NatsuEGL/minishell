@@ -1,21 +1,21 @@
 NAME = minishell
 CC = cc 
-FLAGS =   -Wall -Wextra -Werror #-g -fsanitize=address
+FLAGS =   -Wall -Wextra -Werror -g -fsanitize=address
 LIBFT_A = libft/libft.a
 LIBFT = libft/
 
-SRC = SRC/main.c SRC/parsing.c SRC/utils.c SRC/check_input.c SRC/erorr_hundle.c SRC/quotes_hundle.c SRC/env.c SRC/str_utils.c SRC/export.c SRC/lst_utils.c SRC/unset.c SRC/expand.c SRC/expand2.c \
-	SRC/echo.c SRC/execution.c SRC/cd.c SRC/pwd.c SRC/execution_utiles.c SRC/signals.c SRC/heredoc.c SRC/execution2.c SRC/execution3.c SRC/execution4.c SRC/execution5.c SRC/exit.c \
-	SRC/cd2.c SRC/cd3.c SRC/check_input_norm.c SRC/exec_norm1.c SRC/exec_norm2.c SRC/exec_norm3.c SRC/exec_norm4.c SRC/exec_norm5.c
-		
+SRC = main.c parsing.c utils.c check_input.c erorr_hundle.c quotes_hundle.c env.c str_utils.c export.c lst_utils.c unset.c expand.c expand2.c \
+	echo.c execution.c cd.c pwd.c execution_utiles.c signals.c execution2.c execution3.c execution4.c execution5.c exit.c \
+	cd2.c cd3.c check_input_norm.c exec_norm1.c expand3.c expand4.c exec_norm2.c exec_norm3.c exec_norm4.c exec_norm5.c env_norm.c export_norm.c  export_parsing.c
+		 
 OBJ = $(SRC:.c=.o)
 
 all : $(NAME)
 
-%.o : %.c SRC/minishell.h libft/libft.h
+%.o : %.c minishell.h libft/libft.h
 	$(CC) $(FLAGS) $(CPPFLAGS)  -c $< -o $@
 
-$(NAME) : $(OBJ) SRC/minishell.h libft/libft.h
+$(NAME) : $(OBJ) minishell.h libft/libft.h
 	@make -s -C $(LIBFT) 
 	$(CC) $(FLAGS) $(OBJ) -lreadline $(LDFLAGS) $(LIBFT_A) $(LDFLAGS) -o $(NAME)
 
